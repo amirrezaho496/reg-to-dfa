@@ -1,3 +1,6 @@
+# Published for students to learn from it 
+# Copyright (c) 2023, The University of Esfahan in khancar. All rights reserved.
+
 import tree.syntax_tree as stree
 import tree.d_tran as dtran
 import tree.draw_tree as draw_tree
