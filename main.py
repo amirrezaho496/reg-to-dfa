@@ -1,6 +1,7 @@
 # Published for students to learn from it 
 # Copyright (c) 2023, The University of Esfahan in khancar. All rights reserved.
 
+from re import S
 import tree.syntax_tree as stree
 import tree.d_tran as dtran
 import tree.draw_tree as draw_tree
@@ -39,7 +40,7 @@ print("____________________________")
 print("Follow position table :\n")
 for n in range(1,stree.NODES_NUMBERS):
     if fp_table[n] == set():
-        char = '%'
+        char = stree.EMPTY
     else:
         char = fp_table[n]
     print(f"{n} : {char}")
@@ -58,12 +59,13 @@ d_tran = dtran.DTran(fp_table=fp_table, alpha_dict=alpha_dict)
 d_tran.create_d_tran(root.firstpos)
 
 d_tran.print_d_tran()
-# print("____________________________")
-# print('Table : \n')
-
-# d_tran.print_d_tran_table()
-
+print("____________________________")
+print('DFA : \n')
 dfa = d_tran.convert_dtran_to_dict()
+dplt.print_dfa(dfa)
+print("____________________________")
+
+
 start_state = d_tran.get_item_by_state(root.firstpos)
 final = d_tran.get_final_states_ids()
 dplt.draw_dfa(dfa, start_state.id, final)

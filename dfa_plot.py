@@ -8,8 +8,10 @@ def draw_dfa(dfa, start_state: str, final_states:list):
         for letter, destination in dfa[state].items():
             G.add_edge(state, destination, label=letter)
 
-    pos = nx.spring_layout(G)
-    plt.figure(figsize=(8, 6))
+    G = convert_multigraph_to_graph(G)  # Convert MultiDiGraph to DiGraph
+    
+    pos = nx.circular_layout(G)  # Increase distance between nodes
+    plt.figure(figsize=(12, 12))  # Increase figure size
 
     # green is for start state, blue for normal states, red for final sta 
     # M for nodes what are start and final
@@ -24,20 +26,21 @@ def draw_dfa(dfa, start_state: str, final_states:list):
             node_colors.append('r')
         else:
             node_colors.append('b')
-    pass
 
-    nx.draw_networkx_nodes(G, pos, cmap= plt.get_cmap('jet'), 
-                           node_color = node_colors)
+    nx.draw(G, pos, node_color=node_colors, with_labels=False)  # Draw nodes and edges without labels
+    labels = nx.get_edge_attributes(G, 'label')
+    nx.draw_networkx_labels(G, pos)  # Draw node labels
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)  # Draw edge labels
+
+    plt.show()  # Display the graph
     
-    rad = nprand.randint(1, 50) / 100 # 29 / 100 = 0.29
-    nx.draw_networkx_labels(G, pos)
-    nx.draw_networkx_edges(G, pos, edge_color='b', arrows=True, connectionstyle=f"arc3, rad={rad}")
+    
+def print_dfa(dfa):
+    print(f"{'State ID':<10} {'Destinations':<20}")
+    for state_id, state_transitions in dfa.items():
+        destinations = ', '.join([f"{letter} --> {destination}" for letter, destination in state_transitions.items()])
+        print(f"{state_id:<10} {destinations:<20}")
 
-    edge_labels = {(u, v): d['label'] for u, v, d in G.edges(data=True)}
-            
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
-
-    plt.show()
 
 # Example usage:
 # dfa = {
@@ -48,3 +51,15 @@ def draw_dfa(dfa, start_state: str, final_states:list):
 # start_state = 'A'
 # final_states = ['C']
 # draw_dfa(dfa, start_state, final_states)
+
+
+def convert_multigraph_to_graph(M):
+    G = nx.DiGraph() if M.is_directed() else nx.Graph()
+    for u, v, data in M.edges(data=True):
+        if G.has_edge(u, v):
+            G[u][v]['label'].append(data['label'])
+        else:
+            G.add_edge(u, v, label=[data['label']])
+    for u, v, data in G.edges(data=True):
+        data['label'] = ', '.join(data['label'])  # Join list of labels into a string
+    return G

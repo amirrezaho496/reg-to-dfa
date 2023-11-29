@@ -58,10 +58,10 @@ class DTran:
         self.table.clear()
         id = 1
         first = DTranItem(id)
-        first.state = start_state
+        first.state = start_state #.union(set(stree.EMPTY))
         self.add_state(first)
         
-        all_letters = self.get_all_uniq_letters()
+        all_letters = self.get_all_uniq_letters() - set(stree.SHARP)
         
         while not self.are_all_states_checked():
             for item in self.table:
@@ -72,6 +72,8 @@ class DTran:
                         for key in keys:
                             if key in item.state:
                                 destination = destination.union(self.followpos_table[key])
+                        if not destination:
+                            destination = set(stree.EMPTY)
                         if destination:
                             existing_item = self.get_item_by_state(destination)
                             if existing_item is None:
@@ -97,8 +99,8 @@ class DTran:
     def print_d_tran(self):
         print(f"{'State ID':<10} {'State':<20} {'Is final':<10} {'Destinations':<20}")
         for item in self.table:
-            destinations = ', '.join([f"{letter} --> {str(destination):<20}" for letter, destination in item.destination.items()])
-            print(f"{item.id:<10} {str(item.state):<20} {str(item.is_final):<10} {destinations:<20}")
+            destinations = ', '.join([f"{letter} --> {str(destination - set(stree.EMPTY)) if destination != set(stree.EMPTY) else stree.EMPTY:<20}" for letter, destination in item.destination.items()])
+            print(f"{item.id:<10} {str(item.state if item.state != set(stree.EMPTY) else stree.EMPTY):<20} {str(item.is_final):<10} {destinations:<20}")
 
     def print_d_tran_table(self):
         print(f"{'State ID':<10} {'State':<20} {'Is final':<10}")

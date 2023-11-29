@@ -3,8 +3,9 @@ from collections import deque
 STAR = "*"
 OR = "|"
 CONCAT = "."
-EPSILON = "E"
+EPSILON = "ε"
 SHARP = "#"
+EMPTY = "∅"
 
 OPERATORS = [STAR, OR, CONCAT]
 NODES_NUMBERS = 1
