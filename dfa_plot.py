@@ -32,7 +32,7 @@ def draw_dfa(dfa, start_state: str, final_states:list):
     nx.draw_networkx_labels(G, pos)  # Draw node labels
     
     for u, v, d in G.edges(data=True):
-        nx.draw_networkx_edges(G, pos, edgelist=[(u, v)], connectionstyle=f'arc3, rad={rand()/3}')  # Draw edges with curves
+        nx.draw_networkx_edges(G, pos, edgelist=[(u, v)])  # Draw edges
         nx.draw_networkx_edge_labels(G, pos, edge_labels={(u, v): d['label']})  # Draw edge labels
 
     plt.show()  # Display the graph
