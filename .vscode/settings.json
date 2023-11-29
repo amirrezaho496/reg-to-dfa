@@ -2,5 +2,17 @@
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter"
     },
-    "python.formatting.provider": "none"
+    "python.formatting.provider": "none",
+    "django.snippets.exclude": [
+
+        "cms",
+        "wagtail"
+    ],
+    "python.analysis.autoFormatStrings": true,
+    "python.analysis.addImport.exactMatchOnly": false,
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.importFormat": "relative",
+    "python.analysis.inlayHints.functionReturnTypes": true,
+    "python.analysis.inlayHints.pytestParameters": true,
+    "python.analysis.inlayHints.variableTypes": true
 }

@@ -1,5 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+import numpy.random as nprand
 
 def draw_dfa(dfa, start_state: str, final_states:list):
     G = nx.MultiDiGraph()
@@ -28,8 +29,9 @@ def draw_dfa(dfa, start_state: str, final_states:list):
     nx.draw_networkx_nodes(G, pos, cmap= plt.get_cmap('jet'), 
                            node_color = node_colors)
     
+    rad = nprand.randint(1, 50) / 100 # 29 / 100 = 0.29
     nx.draw_networkx_labels(G, pos)
-    nx.draw_networkx_edges(G, pos, edge_color='b', arrows=True, connectionstyle='arc3, rad=0.1')
+    nx.draw_networkx_edges(G, pos, edge_color='b', arrows=True, connectionstyle=f"arc3, rad={rad}")
 
     edge_labels = {(u, v): d['label'] for u, v, d in G.edges(data=True)}
             
