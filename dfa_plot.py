@@ -1,6 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-import numpy.random as nprand
+from numpy.random import rand
+from torch import randint
 
 def draw_dfa(dfa, start_state: str, final_states:list):
     G = nx.MultiDiGraph()
@@ -26,11 +27,13 @@ def draw_dfa(dfa, start_state: str, final_states:list):
             node_colors.append('r')
         else:
             node_colors.append('b')
-
-    nx.draw(G, pos, node_color=node_colors, with_labels=False)  # Draw nodes and edges without labels
-    labels = nx.get_edge_attributes(G, 'label')
+    
+    nx.draw_networkx_nodes(G, pos, node_color=node_colors)  # Draw nodes
     nx.draw_networkx_labels(G, pos)  # Draw node labels
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)  # Draw edge labels
+    
+    for u, v, d in G.edges(data=True):
+        nx.draw_networkx_edges(G, pos, edgelist=[(u, v)], connectionstyle=f'arc3, rad={rand()/3}')  # Draw edges with curves
+        nx.draw_networkx_edge_labels(G, pos, edge_labels={(u, v): d['label']})  # Draw edge labels
 
     plt.show()  # Display the graph
     
