@@ -4,6 +4,7 @@ STAR = "*"
 OR = "|"
 CONCAT = "."
 EPSILON = "ε"
+EPSILON_INPUT = "ep"
 SHARP = "#"
 EMPTY = "∅"
 
@@ -30,7 +31,7 @@ class Node:
         if self.is_operator():
             return f"{self.data}"
         
-        return f"{self.data}:{self.number}" 
+        return f"{self.data}{ (':' + str(self.number)) if self.number != None else ''}" 
 
     def is_star(self) -> bool:
         return self.left is None and self.right is None and self.child is not None
@@ -48,7 +49,10 @@ class Node:
             dict[int, str] : a dictionary of the leaf.data and leaf.number
         """
         data = input("Enter node data (or '@' to finish): ")
-
+        if data == EPSILON_INPUT:
+            data = EPSILON
+        
+        
         if data.lower() == "@":
             return None
 
