@@ -11,9 +11,15 @@ EMPTY = "∅"
 OPERATORS = [STAR, OR, CONCAT]
 NODES_NUMBERS = 1
 ALHPA_DICT: dict[int, str] = {}
-TREE_ROOT  = None
+TREE_ROOT = None
 
-DEVELOPERS = ["AMIRREZA HOSSEINI DEHLAGHI", "ALI HOJATI", "ALI EBRAHIMI", "MOHAMMAD REZA SAEEDIAN JAZI"]
+DEVELOPERS = [
+    "AMIRREZA HOSSEINI DEHLAGHI",
+    "ALI HOJATI",
+    "ALI EBRAHIMI",
+    "MOHAMMAD REZA SAEEDIAN JAZI",
+]
+
 
 class Node:
     def __init__(self, data=None):
@@ -26,12 +32,12 @@ class Node:
         self.followpos = set()
         self.child: Node = None
         self.number: int = None
-        
+
     def __str__(self) -> str:
         if self.is_operator():
             return f"{self.data}"
-        
-        return f"{self.data}{ (':' + str(self.number)) if self.number != None else ''}" 
+
+        return f"{self.data}{ (':' + str(self.number)) if self.number != None else ''}"
 
     def is_star(self) -> bool:
         return self.left is None and self.right is None and self.child is not None
@@ -51,8 +57,7 @@ class Node:
         data = input("Enter node data (or '@' to finish): ")
         if data == EPSILON_INPUT:
             data = EPSILON
-        
-        
+
         if data.lower() == "@":
             return None
 
@@ -62,21 +67,21 @@ class Node:
             # STAR has one child
             if data == STAR:
                 print("Enter child of " + data)
-                self.child= Node().read_tree_preorder()
+                self.child = Node().read_tree_preorder()
             else:
                 print("Enter left child of " + data)
-                self.left= Node().read_tree_preorder()
+                self.left = Node().read_tree_preorder()
 
                 print("Enter right child of " + data)
-                self.right= Node().read_tree_preorder()
+                self.right = Node().read_tree_preorder()
         # check if its not Epsilon set a number for it
         elif data != EPSILON:
             set_node_number(self, data)
-            #alpha_dict[self.number] = self.data
+            # alpha_dict[self.number] = self.data
             pass
-        
+
         return self
-    
+
     def find_nullable(self):
         preorder(self, is_nullable_node)
         pass
@@ -115,7 +120,7 @@ class Node:
 class FollowPosFinder:
     def __init__(self) -> None:
         self.fp_table: dict[int, set] = {}
-        self.number: int = None
+        self.number: int | None = None
 
     def __follow_pos_node(self, node: Node, number: int):
         if node.data == CONCAT:
@@ -131,18 +136,18 @@ class FollowPosFinder:
 
     def make_follow_pos_dict(self, root: Node):
         if root is not None:
-            if (root.data == STAR):
+            if root.data == STAR:
                 self.make_follow_pos_dict(root.child)
-            else:           
+            else:
                 self.make_follow_pos_dict(root.left)
                 self.make_follow_pos_dict(root.right)
-            
+
             self.__follow_pos_node(root, self.number)
 
     def get_fp_table(self):
         return self.fp_table
-    
-    def set_number(self,n : int):
+
+    def set_number(self, n: int):
         if n >= 1:
             self.number = n
             self.fp_table[n] = set()
@@ -160,7 +165,7 @@ def is_nullable_node(node: Node) -> bool:
         node.nullable = node.right.nullable or node.left.nullable
     else:
         node.nullable = False
-    
+
     return node.nullable
 
 
@@ -234,10 +239,10 @@ def breadth_first(root, func):
 def set_node_number(node: Node, data):
     global NODES_NUMBERS
     global ALHPA_DICT
-    
+
     node.number = NODES_NUMBERS
     ALHPA_DICT[NODES_NUMBERS] = data
-    
+
     NODES_NUMBERS = NODES_NUMBERS + 1
     return node.number
 
@@ -247,6 +252,7 @@ def reset_nodes_number():
     global ALHPA_DICT
     ALHPA_DICT = {}
     NODES_NUMBERS = 1
-    
+
+
 def get_alphabet_dict():
     return ALHPA_DICT

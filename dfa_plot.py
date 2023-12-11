@@ -12,7 +12,7 @@ def draw_dfa(dfa, start_state: str, final_states:list):
     G = convert_multigraph_to_graph(G)  # Convert MultiDiGraph to DiGraph
     
     pos = nx.circular_layout(G)  # Increase distance between nodes
-    plt.figure(figsize=(12, 12))  # Increase figure size
+    plt.figure( num="DFA",figsize=(12, 12))  # Increase figure size
 
     # green is for start state, blue for normal states, red for final sta 
     # M for nodes what are start and final
